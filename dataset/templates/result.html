@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Drug Side Effect Prediction</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="/static/css/style1.css">
+    </head>
+  <body>
+    <div><h3>Drug Side Effect Prediction</h3></div>
+    <div class="top"><h5><a href="http://127.0.0.1:5000/">Back</a></h5></div>
+    <div class="container my-5 bg-text">
+       
+        <div class="first">
+        <h1> {{ predicted_text }}  {{predicted}}</h1>
+        </div>
+    </div>     
+    <div class="container1">
+          {% if predicted == 'No Side Effect'  %} 
+          <h2>You are safe! There is no side effect for this drug.</h2>
+                  
+          {% elif predicted == 'Mild' %}
+          <h2> There is a very mild side effect for this drug.</h2>
+          {% elif predicted == 'Moderate' %}
+          <h2> There is a moderate side effect for this drug.</h2>
+          {% elif predicted == 'Severe' %}
+          <h2>Be careful! Try to lower your dose or try a different drug.</h2>   
+          {% else %}
+          <h2>Danger! Better to take precaution and discuss with doctor, if needed change the medication.</h2>
+          {% endif %}
+    </div>
+       
+    
+  </body>
+</html>

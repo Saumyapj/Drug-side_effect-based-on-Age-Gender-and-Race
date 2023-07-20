@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Drug Side Effect Prediction</title>
+        <style>
+            .warning {
+              color: red;
+            }
+        </style>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <div class="container my-5 bg-text">
+            <div class="first">
+            <h3>Drug Side Effect Prediction</h3>
+            <br><br>
+            <form id="myform" action="/predict" method="post" class="form-group">
+                <div class="row">
+                    <div class="col"><label for="">Drug</label></div>
+                    <div id='input' class="col"><input type="text" name="drugname"class="form-control" placeholder="Enter the name of a drug" required></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Gender</label></div>
+                    <div class="col"> <select id="gender" name="gender"  class="form-control" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Race</label></div>
+                    <div class="col"> <select id="race" name="race"  class="form-control" required>
+                        <option value="">Select Race</option>
+                        <option value="White">White</option>
+                        <option value="Hispanic">Hispanic</option>
+                        <option value="Asian">Asian</option>
+                        <option value="Black">Black</option>
+                        <option value="American Indian">American Indian</option>
+                        <option value="Other">Other</option>
+                    </select></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Age</label></div>
+                    <div class="col"> <select id="age" name="age" class="form-control" required>
+                        <option value="">Select Age Range</option>
+                        <option value="0-2">0-2</option>
+                        <option value="3-6">3-6</option>
+                        <option value="7-12">7-12</option>
+                        <option value="13-18">13-18</option>
+                        <option value="19-24">19-24</option>
+                        <option value="25-34">25-34</option>
+                        <option value="35-44">35-44</option>
+                        <option value="45-54">45-54</option>
+                        <option value="55-64">55-64</option>
+                        <option value="65-74">65-74</option>
+                        <option value="75 or over">75 or over</option>
+                    </select></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Satisfaction Rating</label></div>
+                    <div class="col"> <select id="satisfaction" name="satisfaction"  class="form-control" required>
+                        <option value="">Select Satisfaction Rating</option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                    </select></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Effectiveness Rating</label></div>
+                    <div class="col"> <select id="effectiveness" name="effectiveness"  class="form-control" required>
+                        <option value="">Select Effectiveness Rating</option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                    </select></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Review of drug</label></div>
+                    <div  class="col"> <select id="review" name="review"  class="form-control" required>
+                        <option value="">Select Drug Review feedback</option>
+                        <option value=1>Positive</option>
+                        <option value=0>Negative</option>
+                    </select></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col"><label for="">Year of drug usage</label></div>
+                    <div id='input' class="col"><input type="text" name="year" class="form-control" placeholder="Year of drug usage" required></div>
+                </div>
+                <br>
+                
+                <div class="row">
+                    <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="reset" value="Reset" class="btn btn-danger"></div>
+                    <div class="col">&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-success">Predict</button></div>
+                </div>
+                <br>
+            </form>
+            <p id="warningMessage" class="warning" style="display: none;">Please fill out the required field.</p> 
+            <script>
+                const form = document.getElementById('myform');
+                const warningMessage = document.getElementById('warningMessage');
+                
+                const inputs = form.querySelectorAll('input[required]');
+                form.addEventListener('submit', function(event) {
+                    
+                        if (!form.checkValidity()) {
+                          event.preventDefault();
+                          warningMessage.style.display = 'block';
+                        } else if (!validateSelects()) {
+                          event.preventDefault();
+                          warningMessage.style.display = 'block';
+                        } else {
+                          warningMessage.style.display = 'none';
+                        }
+                        });
+                  
+                      function validateSelects() {
+                        const selects = form.querySelectorAll('select[required]');
+                  
+                        for (let i = 0; i < selects.length; i++) {
+                          const select = selects[i];
+                          if (select.selectedIndex === 0) {
+                            return false;
+                          }
+                        }
+                        
+                        return true;
+                      }          
+                
+            </script>
+            <br>
+            </div>
+            
+        </div>
+      
+    </body>
+</html>
